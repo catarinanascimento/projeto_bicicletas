@@ -208,7 +208,6 @@ assert answer != "Escreva sua resposta aqui.", "TAREFA 8: Escreva sua própria r
 # TODO: Ache a duração de viagem Mínima, Máxima, Média, e Mediana.
 # Você não deve usar funções prontas para isso, como max() e min().
 trip_duration_list = column_to_list(data_list, 2)
-sum_trip = 0.
 min_trip = 0.
 max_trip = 0.
 mean_trip = 0.
@@ -216,11 +215,10 @@ median_trip = 0.
 
 # Buscando max, min e realizando a soma
 for trip in trip_duration_list:
-    sum_trip += trip
-    if trip > max_trip:
-        max_trip = trip
-    if trip < min_trip:
-        min_trip = trip
+    if float(trip) > max_trip:
+        max_trip = float(trip)
+    if float(trip) < min_trip:
+        min_trip = float(trip)
  # Ordenando para achar o mediana, também poderia ser usada para achar o min e max, pegando o primeiro e último elemento.
 trip_duration_list_orden = sorted(trip_duration_list)
 length_list = len(trip_duration_list)
@@ -280,13 +278,13 @@ print("Você vai encarar o desafio? (yes ou no)")
 answer = "yes"
 def count_items(column_list):
     # """
-    Nesta função é feita a contagem de ocorrência de cada item diferente em uma lista, sem ser necessário definir os itens.
-      Argumentos:
-          column_list: A lista de itens (list).
-      Retorna:
-          Uma tupla (item_types, count_items):
-                item_types - os tipos diferentes de itens na lista.
-                count_items - quantidade de cada tipo de itens na lista.
+    # #Nesta função é feita a contagem de ocorrência de cada item diferente em uma lista, sem ser necessário definir os itens.
+    #   Argumentos:
+    #       column_list: A lista de itens (list).
+    #   Retorna:
+    #       Uma tupla (item_types, count_items):
+    #             item_types - os tipos diferentes de itens na lista.
+    #             count_items - quantidade de cada tipo de itens na lista.
     # """
 
     items_set = set(column_list)
