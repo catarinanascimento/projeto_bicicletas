@@ -54,14 +54,14 @@ for i, data in enumerate(data_list[:20]):
 # TAREFA 3
 # TODO: Crie uma função para adicionar as colunas(features) de uma lista em outra lista, na mesma ordem
 def column_to_list(data, index):
-#  """
-#     Uma função que adiciona as colunas(features) de uma lista em outra lista, na mesma ordem.
-#       Argumentos:
-#           data: A lista de dados (list).
-#           index: O indice da coluna (int).
-#       Retorna:
-#           Uma lista com os valores da coluna escolhida pelo indice 'index'
-#  """
+    """
+    Uma função que adiciona as colunas(features) de uma lista em outra lista, na mesma ordem.
+    Argumentos:
+        data: A lista de dados (list).
+        index: O indice da coluna (int).
+    Retorna:
+        Uma lista com os valores da coluna escolhida pelo indice 'index'
+    """
     column_list = []
     # Dica: Você pode usar um for para iterar sobre as amostras, pegar a feature pelo seu índice, e dar append para uma lista
     for sample in data:
@@ -108,13 +108,13 @@ assert male == 935854 and female == 298784, "TAREFA 4: A conta não bate."
 # TODO: Crie uma função para contar os gêneros. Retorne uma lista.
 # Isso deveria retornar uma lista com [count_male, count_female] (exemplo: [10, 15] significa 10 Masculinos, 15 Femininos)
 def count_gender(data_list):
-    # """
-    # Essa função deve contar a quantidade de cada gênero em uma lista.
-    #   Argumentos:
-    #       data_list: A lista de gêneros (list).
-    #   Retorna:
-    #       Uma lista com as quantidades de homem e mulher, no formato [qntd_male, qntd_female].
-    # """
+    """
+     Essa função deve contar a quantidade de cada gênero em uma lista.
+       Argumentos:
+           data_list: A lista de gêneros (list).
+       Retorna:
+           Uma lista com as quantidades de homem e mulher, no formato [qntd_male, qntd_female].
+    """
     male = 0
     female = 0
     for data in data_list:
@@ -123,7 +123,6 @@ def count_gender(data_list):
         elif data[-2] == "Female":
             female += 1
     return [male, female]
-
 
 print("\nTAREFA 5: Imprimindo o resultado de count_gender")
 print(count_gender(data_list))
@@ -175,19 +174,35 @@ plt.show(block=True)
 # TODO: Crie um gráfico similar para user_types. Tenha certeza que a legenda está correta.
 print("\nTAREFA 7: Verifique o gráfico!")
 
+def count_user_types(data_list):
+    """Conta os tipos de usuários e retorna em uma lista
+      Argumentos:
+          data_list: Lista a ser verificada.
+      Retorna:
+          Uma lista com a quantidade de cada tipo de usuário na lista."""
+    customer = 0
+    subscriber = 0
+    nogenero = 0
+    for indice in range(len(data_list)):
+        if (column_to_list(data_list, -3)[indice] == "customer"):
+            customer += 1
+        elif (column_to_list(data_list, -3)[indice] == "subscriber"):
+            subscriber += 1
+        else:
+            nogenero += 1  
+    return [customer, subscriber]
+
 user_types_list = column_to_list(data_list, -3)
-types = ["Customer", "Dependent", "Subscriber"]
-quantity = [user_types_list.count("Customer"), user_types_list.count("Dependent"), user_types_list.count("Subscriber") ]
-
-print("Customer:{}\nDependent:{}\nSubscriber:{}".format(quantity[0], quantity[1], quantity[2]))
-
+types = ["customer", "subscriber"]
+quantity = count_user_types(data_list)
 y_pos = list(range(len(types)))
 plt.bar(y_pos, quantity)
 plt.ylabel('Quantidade')
-plt.xlabel('Tipos de usuários')
+plt.xlabel('Tipos de Usuários')
 plt.xticks(y_pos, types)
-plt.title('Quantidade por Tipo de usuário')
+plt.title('Quantidade por Tipos de Usuários')
 plt.show(block=True)
+
 
 # input("Aperte Enter para continuar...")
 # TAREFA 8
@@ -212,24 +227,36 @@ min_trip = 0.
 max_trip = 0.
 mean_trip = 0.
 median_trip = 0.
+sum_time = 0.0
 
-# Buscando max, min e realizando a soma
-for trip in trip_duration_list:
-    if float(trip) > max_trip:
-        max_trip = float(trip)
-    if float(trip) < min_trip:
-        min_trip = float(trip)
- # Ordenando para achar o mediana, também poderia ser usada para achar o min e max, pegando o primeiro e último elemento.
-trip_duration_list_orden = sorted(trip_duration_list)
-length_list = len(trip_duration_list)
+trip_duration_list = [ float(i) for i in trip_duration_list ]
+trip_duration_list.sort()
+for i in trip_duration_list:
+    if i <= min_trip or min_trip == 0.0:
+        min_trip = i
+    
+    if i >= max_trip:
+        max_trip = i
+    
+    sum_time += i
 
- # Arredondando a saída
-max_trip = int(max_trip)
-min_trip = int(min_trip)
-max_trip = round(trip_duration_list_orden[len(trip_duration_list_orden) - 1])
-min_trip = round(trip_duration_list_orden[0])
-mean_trip = round(sum_trip/length_list)
-median_trip = int(trip_duration_list_orden[length_list // 2])
+mean_trip = sum_time / len(trip_duration_list)
+
+if (len(trip_duration_list) % 2 == 0):
+    # par
+    indice1 = (len(trip_duration_list) // 2)
+    indice2 = indice1 + 1
+    valor1 = float(trip_duration_list[indice1])
+    valor2 = float(trip_duration_list[indice2])
+
+    median_trip = (valor1 + valor2) / 2.0
+    
+else:
+    # impar
+    indice = (len(trip_duration_list) // 2) + 1
+    median_trip = float(trip_duration_list[indice])
+
+
 
 print("\nTAREFA 9: Imprimindo o mínimo, máximo, média, e mediana")
 print("Min: ", min_trip, "Max: ", max_trip, "Média: ", mean_trip, "Mediana: ", median_trip)
@@ -260,15 +287,14 @@ assert len(start_stations) == 582, "TAREFA 10: Comprimento errado de start stati
 # TAREFA 11
 # Volte e tenha certeza que você documentou suas funções. Explique os parâmetros de entrada, a saída, e o que a função faz. Exemplo:
 # def new_function(param1: int, param2: str) -> list:
-    #   """
-    #   Função de exemplo com anotações.
-    #   Argumentos:
-    #       param1: O primeiro parâmetro.
-    #       param2: O segundo parâmetro.
-    #   Retorna:
-    #       Uma lista de valores x.
-
-    #   """
+"""
+Função de exemplo com anotações.
+Argumentos:
+    param1: O primeiro parâmetro.
+    param2: O segundo parâmetro.
+Retorna:
+    Uma lista de valores x
+"""
 
 input("Aperte Enter para continuar...")
 # TAREFA 12 - Desafio! (Opcional)
@@ -277,16 +303,15 @@ input("Aperte Enter para continuar...")
 print("Você vai encarar o desafio? (yes ou no)")
 answer = "yes"
 def count_items(column_list):
-    # """
-    # #Nesta função é feita a contagem de ocorrência de cada item diferente em uma lista, sem ser necessário definir os itens.
-    #   Argumentos:
-    #       column_list: A lista de itens (list).
-    #   Retorna:
-    #       Uma tupla (item_types, count_items):
-    #             item_types - os tipos diferentes de itens na lista.
-    #             count_items - quantidade de cada tipo de itens na lista.
-    # """
-
+    """
+    Nesta função é feita a contagem de ocorrência de cada item diferente em uma lista, sem ser necessário definir os itens.
+      Argumentos:
+          column_list: A lista de itens (list).
+      Retorna:
+          Uma tupla (item_types, count_items):
+                item_types - os tipos diferentes de itens na lista.
+                count_items - quantidade de cada tipo de itens na lista.
+    """
     items_set = set(column_list)
     # print(items_set)
     item_types = []
